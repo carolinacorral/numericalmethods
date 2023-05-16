@@ -1,0 +1,24 @@
+def false_position(f, a, b, error, iter):
+    
+    if f(a) * f(b) > 0:
+        print(f"No root in interval [{a},{b}]")
+        return None
+    else:
+        for i in range(iter):
+            xr = a - ( (f(a) * (b-a)) / (f(b) - f(a)))
+            
+            if abs((xr - a) / xr) < error or f(xr) == 0:
+                break
+            elif f(xr) * f(a) < 0:
+                b = xr
+            else:
+                a = xr
+         
+    return xr
+
+def f(x):
+    return (x**3) - (x**2) - 100
+
+
+root = false_position(f,-1,10,0.0000001,100)
+print(root)
