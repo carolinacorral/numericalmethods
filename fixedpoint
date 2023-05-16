@@ -1,0 +1,25 @@
+import math
+import numpy as np
+def fixed_point(g, x0, Nmax, epsilon):
+    
+    x = x0
+    for i in range(Nmax):
+        
+        x_next = g(x)
+        
+        if abs((x_next - x)/x_next) < epsilon:
+            return x_next
+        
+        x = x_next
+    
+    return None
+
+def g(x):
+    return x - (x**3 - 2*x - 5) / (3*x**2 - 2)
+
+root = fixed_point(g, 2, 100, 0.01)
+
+if  root is not None:
+    print(root)
+else:
+    print("Fixed point method doesn't converge.")
