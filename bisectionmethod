@@ -1,0 +1,41 @@
+#Bisection Method for polynomials
+degree = int(input("Polynomial degree: "))
+xi = int(input("Interval inferior value: "))
+xu = int(input("Interval superior value: "))
+
+coef = []
+
+print("Insert coefficients from highest to lowest degree: ") 
+
+for i in range(0,degree+1):
+    coef.append(float(input()))
+   
+tol = float(input("Insert desired tolerance: "))
+
+condition = True
+
+while condition:
+    xr= (xi + xu) / 2    
+    fxi=0
+    
+    for i in range(0,degree+1):
+        fxi += (pow(xi,(degree-i)))*coef[i]
+    
+
+    fxr=0
+
+    for k in range(0,degree+1):
+        fxr += (pow(xr,(degree-k)))*coef[k]
+    
+    
+    if fxi*fxr<0:
+          
+        condition = abs((xr-xu)/xr) > tol
+        xu=xr   
+    else: 
+        
+        condition = abs((xr-xu)/xr) > tol
+        xi=xr
+    
+
+print("Approximate root: " + str(xr))
