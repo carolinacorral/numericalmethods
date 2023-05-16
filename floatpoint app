@@ -1,0 +1,117 @@
+from tkinter import * 
+import customtkinter as ctk
+
+
+
+root = ctk.CTk()
+
+root.title("IEEE 754 Floating Point")
+root.geometry("600x300")
+
+def binary(d):
+    b = 0
+    m = 1
+    while d>0:
+        b = b + ((d%2)*m)
+        m = m*10
+        d = int(d/2)
+    return b
+
+def binaryDec(d):
+    num = d
+    number = [0]*23
+    numb = ''
+    for i in range(0,23):
+        num=num*2
+        if num < 1:
+            number[i]=0            
+        elif num<2 and num>1:
+            number[i]=1
+            num=num-1            
+        elif num == 1:
+            number[i]=1            
+        else:
+            num=2           
+        i=i+1
+
+    str_n=''
+    for n in number:
+        str_n += str(n)
+        
+    return str_n
+
+
+def convertir():
+
+    num_usr = float(txtbox.get())
+
+    if num_usr<0:
+        sign = '1'
+    else:
+        sign = '0'    
+
+    num = abs(num_usr)
+
+    if num >=1:
+
+        intpart = int(num)
+        decpart =float( '0.' + str(num).split('.')[1] )
+
+        binint = binary(intpart)
+        bindec = binaryDec(decpart)
+
+
+        exp = len(str(binint)) -1 
+        bias = 127 + exp
+        biasbin = binary(bias)
+
+        temp = str(binint) + bindec
+        mantisa = temp[1:] #Quita bit implicito
+
+        
+    else:
+        binpart = binaryDec(num)    
+        
+        pos_impl = binpart.find('1')
+        exp = pos_impl + 1
+        bias = 127 - exp 
+
+        biasbin = binary(bias)
+
+        mantisa = binpart[pos_impl+1:]
+        
+        
+        for i in range(0,pos_impl):
+            mantisa += '0'
+        
+    flt_point = sign + '0' + str(biasbin) + mantisa
+    sign_lbl = ctk.CTkLabel(root,text="Sign: " + sign, font=("Helvetica",10))
+    bias_lbl = ctk.CTkLabel(root,text="Bias: " + str(biasbin) + " ("+ str(bias)+")", font=("Helvetica",10))
+    mantissa_lbl = ctk.CTkLabel(root,text="Mantisa: " + mantisa, font=("Helvetica",10))
+
+    sign_lbl.grid(row=2,column=0)
+    bias_lbl.grid(row=3,column=0)
+    mantissa_lbl.grid(row=4,column=0)
+
+    global result
+    result = ctk.CTkLabel(root,text=flt_point, font=("Helvetica",10))
+    result.grid(row=1,column=0)  
+    
+def clear():
+    txtbox.delete(0,END)
+    result.destroy()
+
+
+txtbox = ctk.CTkEntry(root)
+txtbox.grid(row=0,column=0,pady=20,ipadx=100,padx=50)
+
+txt_button = ctk.CTkButton(root,text="Convert to floating point",command=convertir,font=("Helvetica",10))
+txt_button.grid(row=0,column=1,padx=50,pady=20)
+
+clear_btn = ctk.CTkButton(root,text="Clear",command=clear,font=("Helvetica",10))
+clear_btn.grid(row=2,column=1,padx=50,pady=20)
+
+exit_btn = ctk.CTkButton(root,text="Quit",command=root.quit,font=("Helvetica",10))
+exit_btn.grid(row=3,column=1,padx=50,pady=20)
+
+root.mainloop()
